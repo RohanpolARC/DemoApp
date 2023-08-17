@@ -1,8 +1,8 @@
 import { ActionColumnContext, AdaptableButton, AdaptableOptions, CustomDisplayFormatterContext } from '@adaptabletools/adaptable-angular-aggrid';
-import { ColDef, GridOptions, Module } from '@ag-grid-community/core';
+import { ColDef, GridOptions, Module, ValueGetterParams } from '@ag-grid-community/core';
 import { Component } from '@angular/core';
 import { CommonConfig } from './configs/common-config';
-import { dateFormatter, dateTimeFormatter } from './shared/functions/formatter';
+import { dateFormatter, dateTimeFormatter, getMomentDateStr } from './shared/functions/formatter';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -56,8 +56,14 @@ export class AppComponent {
     {
       headerName: 'Settle Date',
       field: 'settleDate',
-      // valueFormatter: dateFormatter,
-      // cellClass: 'dateUK',
+      // valueGetter(params: ValueGetterParams) {
+      //       let val = params.data?.[params.column.getColId()]
+      //       if(params.colDef?.type === 'abColDefDate' && val){
+      //         return getMomentDateStr(val)
+      //       }
+      //       return val;
+      //     },
+      cellClass: 'dateUK',
       type: 'abColDefDate',
     },
     { headerName: "Modified By",  field: 'modifiedBy', type:'abColDefString'},
@@ -107,10 +113,13 @@ export class AppComponent {
       },
       rowGroupPanelShow: 'always',
       allowContextMenuWithControlKey: true,
+      
       // no need for this verbose & error-prone configuring
       // AdapTable will take care of this by taking over all existing AdapTable styles
       // excelStyles: CommonConfig.GENERAL_EXCEL_STYLES,
     };
+
+
 
     this.adaptableOptions ={
       licenseKey: CommonConfig.ADAPTABLE_LICENSE_KEY,
@@ -238,7 +247,7 @@ export class AppComponent {
         },
 
         Layout:{
-          Revision: 41,
+          Revision: 42,
           CurrentLayout: 'Basic Portfolio History',
           Layouts: [{
             Name: 'Basic Portfolio History',
@@ -273,7 +282,7 @@ export class AppComponent {
               actionNew: 'right',
               ActionDelete: 'right',
             },
-            RowGroupedColumns: ['tradeDate', 'fundCcy', 'positionCcy'],
+            RowGroupedColumns: ['asset'],
             ColumnWidthMap:{
               ActionDelete: 50,
             },

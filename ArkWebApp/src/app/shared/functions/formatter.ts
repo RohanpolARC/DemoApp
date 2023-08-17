@@ -10,6 +10,12 @@ export function dateFormatter(params) {
     }
     else return ""
 }
+
+
+export function getMomentDateStr(date: Date): string|null {
+    return moment(date).format('YYYY-MM-DD');
+
+}
     
 export function dateTimeFormatter(params) {
     if(params.value==undefined || params.value=="0001-01-01T00:00:00")
